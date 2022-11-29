@@ -412,7 +412,7 @@ class CharacterRepoImpl : CharacterRepo {
             prevPage = prevPage?.minus(1)
         }
 
-        if (prevPage == 1) {
+        if (page == 1) {
             prevPage = null
         }
 
