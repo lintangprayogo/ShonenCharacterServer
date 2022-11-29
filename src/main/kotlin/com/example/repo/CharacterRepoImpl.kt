@@ -4,6 +4,11 @@ import com.example.models.ApiResponse
 import com.example.models.Character
 
 class CharacterRepoImpl : CharacterRepo {
+    companion object {
+        private const val PREV_PAGE = "prevPage"
+        private const val NEXT_PAGE = "nextPage"
+
+    }
 
     override val page1 = listOf(
         Character(
@@ -395,11 +400,58 @@ class CharacterRepoImpl : CharacterRepo {
         )
     }
 
-    override fun getCharacters(page: Int): ApiResponse {
-        TODO("Not yet implemented")
+    private fun calculatePage(page: Int): Map<String, Int?> {
+        var prevPage: Int? = page
+        var nextPage: Int? = page
+
+        if (page in 1..4) {
+            nextPage = nextPage?.plus(1)
+        }
+
+        if (page in 2..5) {
+            prevPage = prevPage?.minus(1)
+        }
+
+        if (prevPage == 1) {
+            prevPage = null
+        }
+
+        if (page == 5) {
+            nextPage = null
+        }
+
+        return mapOf(PREV_PAGE to prevPage, NEXT_PAGE to nextPage)
     }
 
-    override fun searchCharacters(search: String): ApiResponse {
-        TODO("Not yet implemented")
+    override fun getCharacters(page: Int): ApiResponse {
+        val calculatePage = calculatePage(page)
+        return ApiResponse(
+            success = true,
+            message = "success",
+            prevPage = calculatePage[PREV_PAGE],
+            nextPage = calculatePage[NEXT_PAGE],
+            characters = characteres[page]!!
+        )
+    }
+
+    override fun searchCharacters(search: String?): ApiResponse {
+        return ApiResponse(
+            success = true,
+            message = "success",
+            characters = getCharacterByName(search)
+        )
+    }
+
+    private fun getCharacterByName(search: String?):List<Character> {
+        val founded = mutableListOf<Character>()
+
+        if (search.isNullOrEmpty()){
+            return  emptyList()
+        }
+
+        characteres.values.forEach {list->
+            founded.addAll(list.filter { it.name.contains(search, true) })
+        }
+        return founded
     }
 }

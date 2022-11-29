@@ -14,6 +14,6 @@ interface CharacterRepo {
 
     fun getCharacters(page:Int):ApiResponse
 
-    fun searchCharacters(search:String):ApiResponse
+    fun searchCharacters(search:String?):ApiResponse
 
 }

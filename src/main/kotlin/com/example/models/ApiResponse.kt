@@ -2,11 +2,13 @@ package com.example.models
 
 import kotlinx.serialization.Serializable
 
+
 @Serializable
 data class ApiResponse(
-    val sucess: Boolean,
+    val success: Boolean,
     val message: String? = null,
     val prevPage: Int? = null,
     val nextPage: Int? = null,
-    val data: List<Character>
+    val characters: List<Character> = emptyList(),
+    val lastUpdated: Long? = null
 )
