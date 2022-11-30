@@ -106,6 +106,42 @@ class ApplicationTest {
         }
     }
 
+
+    @Test
+    fun `access  get all characters,asserts error information page  doesnt exist`() = testApplication {
+        application {
+            configureRouting()
+        }
+        client.get("/getAllCharacters?page=999999").apply {
+            assertEquals(expected = HttpStatusCode.BadRequest, actual = status)
+
+            val expected = ApiResponse(
+                success = false,
+                message = "Characters Not Found",
+            )
+            val actual = Json.decodeFromString<ApiResponse>(bodyAsText())
+            assertEquals(expected = expected, actual = actual)
+        }
+    }
+
+    @Test
+    fun `access  get all characters,asserts error information page  is not number`() = testApplication {
+        application {
+            configureRouting()
+        }
+        client.get("/getAllCharacters?page=99ksldas").apply {
+            assertEquals(expected = HttpStatusCode.BadRequest, actual = status)
+
+            val expected = ApiResponse(
+                success = false,
+                message = "Only Number Allowed",
+            )
+            val actual = Json.decodeFromString<ApiResponse>(bodyAsText())
+            assertEquals(expected = expected, actual = actual)
+        }
+    }
+
+
     private fun calculatePage(page: Int): Map<String, Int?> {
         var prevPage: Int? = page
         var nextPage: Int? = page
