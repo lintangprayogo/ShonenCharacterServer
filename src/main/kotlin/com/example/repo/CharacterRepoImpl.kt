@@ -430,7 +430,8 @@ class CharacterRepoImpl : CharacterRepo {
             message = "success",
             prevPage = calculatePage[PREV_PAGE],
             nextPage = calculatePage[NEXT_PAGE],
-            characters = characteres[page]!!
+            characters = characteres[page]!!,
+            lastUpdated = System.currentTimeMillis()
         )
     }
 
